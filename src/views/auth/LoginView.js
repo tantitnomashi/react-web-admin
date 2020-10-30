@@ -34,7 +34,6 @@ const LoginView = () => {
 	const navigate = useNavigate();
 
 
-
 	const handleLogin = (val, action) => {
 		console.log("test onsubmit");
 		const body = {
