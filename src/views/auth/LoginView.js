@@ -1,6 +1,6 @@
 /* eslint-disable no-tabs */
 /* eslint-disable indent */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
@@ -19,6 +19,7 @@ import GoogleIcon from 'src/icons/Google';
 import Page from 'src/components/Page';
 
 import axios from 'axios';
+import { BASE_HOST_API } from "../../utils/appConstant";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -31,9 +32,20 @@ const useStyles = makeStyles((theme) => ({
 
 const LoginView = () => {
 	const classes = useStyles();
+
+<<<<<<< HEAD
+=======
 	const navigate = useNavigate();
 
-
+	useEffect(() => {
+		const token = localStorage.getItem('token');
+		const user = localStorage.getItem('user');
+		console.log(token != null || user != null)
+		if (token != null && user != null) {// accept user when logined
+			navigate('/app/dashboard', { replace: true });
+		}
+	})
+>>>>>>> 05bb92a9174d952e744da8e4edbd3a3434452ffa
 	const handleLogin = (val, action) => {
 		console.log("test onsubmit");
 		const body = {
@@ -47,13 +59,14 @@ const LoginView = () => {
 		console.log("test login");
 		axios({
 			method: 'post',
-			url: 'http://localhost:5555/auth/login',
+			url: BASE_HOST_API + 'auth/login',
 			data: body,
 			headers: { 'Content-Type': 'application/json' }
 		}).then((response) => {
 			console.log(response);
 			if (response.data.token != null) {
 				localStorage.setItem('token', response.data.token);
+				localStorage.setItem('user', response.data.profile);
 				navigate('/app/dashboard', { replace: true });
 			} else {
 				action.setFieldError('username', response.data.message);

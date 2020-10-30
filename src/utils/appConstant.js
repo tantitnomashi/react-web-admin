@@ -1,0 +1,1 @@
+export const BASE_HOST_API = 'https://95e41dc2e976.ngrok.io/';

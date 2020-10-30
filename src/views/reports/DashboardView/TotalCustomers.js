@@ -32,9 +32,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const TotalCustomers = ({ className, ...rest }) => {
+const TotalCustomers = ({ className, amount, ...rest }) => {
   const classes = useStyles();
-
   return (
     <Card
       className={clsx(classes.root, className)}
@@ -58,7 +57,7 @@ const TotalCustomers = ({ className, ...rest }) => {
               color="textPrimary"
               variant="h3"
             >
-              1,600
+              {amount}
             </Typography>
           </Grid>
           <Grid item>
