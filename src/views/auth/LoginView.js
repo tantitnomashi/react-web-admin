@@ -32,20 +32,7 @@ const useStyles = makeStyles((theme) => ({
 
 const LoginView = () => {
 	const classes = useStyles();
-
-<<<<<<< HEAD
-=======
 	const navigate = useNavigate();
-
-	useEffect(() => {
-		const token = localStorage.getItem('token');
-		const user = localStorage.getItem('user');
-		console.log(token != null || user != null)
-		if (token != null && user != null) {// accept user when logined
-			navigate('/app/dashboard', { replace: true });
-		}
-	})
->>>>>>> 05bb92a9174d952e744da8e4edbd3a3434452ffa
 	const handleLogin = (val, action) => {
 		console.log("test onsubmit");
 		const body = {
@@ -66,7 +53,10 @@ const LoginView = () => {
 			console.log(response);
 			if (response.data.token != null) {
 				localStorage.setItem('token', response.data.token);
-				localStorage.setItem('user', response.data.profile);
+				localStorage.setItem('username', response.data.profile.username);
+				localStorage.setItem('user', response.data.profile.username);
+				localStorage.setItem('name', response.data.profile.name);
+				localStorage.setItem('userRole', response.data.profile.role);
 				navigate('/app/dashboard', { replace: true });
 			} else {
 				action.setFieldError('username', response.data.message);

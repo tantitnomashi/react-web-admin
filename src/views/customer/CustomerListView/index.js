@@ -30,6 +30,7 @@ const CustomerListView = () => {
 	const navigate = useNavigate();
 	const token = localStorage.getItem('token');
 	const user = localStorage.getItem('user');
+
 	useEffect(() => {
 		if (token == null || user == null) {// accept user when logined
 			navigate('/login', { replace: true });
@@ -64,12 +65,12 @@ const CustomerListView = () => {
 	}
 
 	const handleSubmit = () => {
-		let token = localStorage.getItem("token")
-		let client = 'client1'
+		let token = localStorage.getItem("token");
+		let creator = localStorage.getItem("username");
 		let body = {
 			content: recordContent.txtContent,
 			quantity: recordContent.numAmount,
-			creator: client
+			creator: creator
 		}
 		axios({
 			method: 'post',
