@@ -1,5 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import React, { useEffect, useState } from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import {
 	Container,
 	Grid,
@@ -16,6 +17,8 @@ import TotalCustomers from './TotalCustomers';
 import TotalProfit from './TotalProfit';
 import TrafficByDevice from './TrafficByDevice';
 
+import { BASE_HOST_API } from "../../../utils/appConstant";
+
 const useStyles = makeStyles((theme) => ({
 	root: {
 		backgroundColor: theme.palette.background.dark,
@@ -28,17 +31,26 @@ const useStyles = makeStyles((theme) => ({
 const Dashboard = () => {
 	const classes = useStyles();
 
+	const navigate = useNavigate();
 	const token = localStorage.getItem('token');
+	const user = localStorage.getItem('user');
 	const client = 'client1';
 	const [totalAmount, setTotalAmount] = useState(0);
-	const [totalUser, setTotalUser] = useState(1);
+	const [totalUser, setTotalUser] = useState(0);
 
+	useEffect(() => {
+		if (token == null || user == null) {// accept user when logined
+			navigate('/login', { replace: true });
+		}
+	})
+	
 	useEffect(() => {
 
 		console.log("test here");
+
 		axios({
 			method: 'get',
-			url: 'http://localhost:5555/record/findSumAdmin',
+			url: BASE_HOST_API + 'record/findSumAdmin',
 			params: {
 				token,
 				creator: client
@@ -49,7 +61,20 @@ const Dashboard = () => {
 		}).catch(() => {
 			// action.setSubmitting(false);
 		});
-
+		axios({
+			method: 'get',
+			url: BASE_HOST_API + 'user/getUserList',
+			params: {
+				token,
+				creator: client
+			}
+		}).then((response) => {
+			console.log(response.data.list.length);
+			let lenght = response.data.list.length
+			setTotalUser(lenght);
+		}).catch(() => {
+			// action.setSubmitting(false);
+		});
 
 	});
 
@@ -79,7 +104,7 @@ const Dashboard = () => {
 						xl={3}
 						xs={12}
 					>
-						<TotalCustomers />
+						<TotalCustomers amount={totalUser} />
 					</Grid>
 					<Grid
 						item

@@ -1,5 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import React, { useEffect, useState } from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import {
 	Box,
 	Container,
@@ -10,6 +11,8 @@ import axios from 'axios';
 import Results from './Results';
 import Toolbar from './Toolbar';
 import data from './data';
+
+import { BASE_HOST_API } from "../../../utils/appConstant";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -23,26 +26,76 @@ const useStyles = makeStyles((theme) => ({
 
 const CustomerListView = () => {
 	const classes = useStyles();
-	// const [customers] = useState(data);
-	const token = localStorage.getItem('token');
-	const creator = 'client1';
-	const [responseData, setResponseData] = useState([]);
 
+	const navigate = useNavigate();
+	const token = localStorage.getItem('token');
+	const user = localStorage.getItem('user');
 	useEffect(() => {
+		if (token == null || user == null) {// accept user when logined
+			navigate('/login', { replace: true });
+		}
+	})
+
+	const creator = "client1"//localStorage.getItem("user").username
+	// const [customers] = useState(data);
+	const [responseData, setResponseData] = useState([]);
+	const [recordContent, setRecordContent] = useState({
+		numAmount: 0,
+		txtContent: 0,
+	});
+	useEffect(() => {
+		getAllUser()
+	}, [setResponseData]);
+
+	const getAllUser = () => {
 		axios({
 			method: 'get',
-			url: 'http://localhost:5555/record/getRecords',
+			url: BASE_HOST_API + 'record/getRecords',
 			params: {
-				token,
+				token: token,
 				creator: creator
 			}
 		}).then((response) => {
-			setResponseData(response.data.list);
+			setResponseData(response.data.list)
+			return response.data.list
 		}).catch(() => {
-			// action.setSubmitting(false);
+			return [];
 		});
-	});
+	}
 
+	const handleSubmit = () => {
+		let token = localStorage.getItem("token")
+		let client = 'client1'
+		let body = {
+			content: recordContent.txtContent,
+			quantity: recordContent.numAmount,
+			creator: client
+		}
+		axios({
+			method: 'post',
+			url: BASE_HOST_API + 'record/create',
+			data: body,
+			params: {
+				token: token
+			},
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}).then((res) => {
+			console.log(res)
+			getAllUser()
+		}).catch((e) => {
+			console.log(e)
+		});
+	}
+	const handleChangeInfoRecord = (e) => {
+		console.log('add record val ' + e.target.name)
+		setRecordContent({
+			...recordContent,
+			[e.target.name]: [e.target.value] + ""
+		})
+		console.log(recordContent)
+	}
 
 	return (
 		<Page
@@ -50,7 +103,7 @@ const CustomerListView = () => {
 			title="Customers"
 		>
 			<Container maxWidth={false}>
-				<Toolbar />
+				<Toolbar handleSubmit={handleSubmit} handleChange={handleChangeInfoRecord} />
 				<Box mt={3}>
 					<Results customers={responseData} />
 				</Box>

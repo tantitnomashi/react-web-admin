@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import {
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Toolbar = ({ className, ...rest }) => {
+const Toolbar = ({ className, handleSubmit, handleChange, ...rest }) => {
   const classes = useStyles();
 
   return (
@@ -49,68 +49,70 @@ const Toolbar = ({ className, ...rest }) => {
           Add customer
         </Button>
       </Box>
-
-      <Box mt={1}>
-        <Card>
-          <CardContent>
-            <Grid
-              container
-              direction="row"
-              justify="flex-start"
-              alignItems="center"
-            >
-	              <Box width={250}>
-	                <TextField
-	                  fullWidth
-	                  InputProps={{
-		                  startAdornment: (
-							  <InputAdornment position="start">
-							    <SvgIcon
-							      fontSize="small"
-							      color="action"
-							    >
-							      <SearchIcon />
-							    </SvgIcon>
-							  </InputAdornment>
-		                  )
-		                }}
-	                  placeholder="Search customer"
-					  variant="outlined"
-					  type="text"
-					  name="txtSearch"
-	                />
-	              </Box>
-	              <Box maxWidth={200} marginLeft={5}>
-	                <TextField
-	                  fullWidth
-	                  placeholder="Amount"
-					  variant="outlined"
-					  type="number"
-					  name="numAmount"
-	                />
-	              </Box>
-	              <Box maxWidth={400} marginLeft={5}>
-	                <TextField
-	                  fullWidth
-	                  placeholder="Content"
-					  variant="outlined"
-					  type="text"
-					  name="txtContent"
-	                />
-	              </Box>
-	              <Box maxWidth={200} marginLeft={5}>
-	                <Button
-	                  color="primary"
-	                  variant="contained"
-					  type="submit"
-	                >
-	                  Add record
+        <Box mt={1}>
+          <Card>
+            <CardContent>
+              <Grid
+                container
+                direction="row"
+                justify="flex-start"
+                alignItems="center"
+              >
+                <Box width={250}>
+                  <TextField
+                    fullWidth
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <SvgIcon
+                            fontSize="small"
+                            color="action"
+                          >
+                            <SearchIcon />
+                          </SvgIcon>
+                        </InputAdornment>
+                      )
+                    }}
+                    placeholder="Search customer"
+                    variant="outlined"
+                    type="text"
+                    name="txtSearch"
+                  />
+                </Box>
+                <Box maxWidth={200} marginLeft={5}>
+                  <TextField
+                    fullWidth
+                    placeholder="Amount"
+                    variant="outlined"
+                    type="number"
+                    name="numAmount"
+                    onChange={handleChange}
+                  />
+                </Box>
+                <Box maxWidth={400} marginLeft={5}>
+                  <TextField
+                    fullWidth
+                    placeholder="Content"
+                    variant="outlined"
+                    type="text"
+                    name="txtContent"
+                    onChange={handleChange}
+                  />
+                </Box>
+                <Box maxWidth={200} marginLeft={5}>
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    type="button"
+                    onClick={handleSubmit}
+                  >
+                    Add record
 	                </Button>
-	              </Box>
-            </Grid>
-          </CardContent>
-        </Card>
-      </Box>
+                </Box>
+              </Grid>
+            </CardContent>
+          </Card>
+        </Box>
     </div>
   );
 };

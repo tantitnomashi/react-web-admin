@@ -10,6 +10,7 @@ import NotFoundView from 'src/views/errors/NotFoundView';
 import ProductListView from 'src/views/product/ProductListView';
 import RegisterView from 'src/views/auth/RegisterView';
 import SettingsView from 'src/views/settings/SettingsView';
+import LogOutView from 'src/views/logout/LogOutView'
 
 const routes = [
   {
@@ -32,6 +33,7 @@ const routes = [
       { path: 'register', element: <RegisterView /> },
       { path: '404', element: <NotFoundView /> },
       { path: '/', element: <Navigate to="/app/dashboard" /> },
+      { path: 'logout', element: <LogOutView /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   }
